@@ -244,7 +244,7 @@ procedure kclose(Param0: Integer { int }); cdecl; external DLLName name 'kclose'
 function sn(Param0: pAnsiChar { char* }; Param1: Integer { int }): pAnsiChar; cdecl; external DLLName name 'sn' delayed;
 function ss(Param0: pAnsiChar { char* }): pAnsiChar; cdecl; external DLLName name 'ss' delayed;
 
-function ktj(Param0: Integer { int }; Param1: Int64 { long long }): pK; cdecl; external DLLName name 'ktj' delayed;
+function ktj(Param0: kType{ int }; Param1: Int64 { long long }): pK; cdecl; external DLLName name 'ktj' delayed;
 function ka(Param0: Integer { int }): pK; cdecl; external DLLName name 'ka' delayed;
 function kb(Param0: Integer { int }): pK; cdecl; external DLLName name 'kb' delayed;
 function kg(Param0: Integer { int }): pK; cdecl; external DLLName name 'kg' delayed;
@@ -395,6 +395,7 @@ var
   FileName: String;
 
 begin
+   // automaticly save the embeded dll to the local directory
   FileName := ExtractFilePath(ExpandFileName(ParamStr(0)))+DLLName;
   if not FileExists(FileName) then begin
     RS := TResourceStream.Create(HInstance,_DLLRName,RT_RCDATA);
@@ -404,67 +405,17 @@ begin
       RS.Free;
     end;
   end;
-//  _hDll := LoadResource(HInstance,NativeUInt(pChar(_DLLRName)));
-//  _pDll := LockResource(_hDll);
-//  _Dll := BTMemoryLoadLibary(_pDll,SizeofResource(HInstance,_hDll));
-///  _LOldNotifyHook  := SetDliNotifyHook2(MyDelayedLoadHook);
-//  _LOldFailureHook := SetDliFailureHook2(MyDelayedLoadHook);
+  // calculate the base date for DateTime Conversions once.
   _DateBase := EncodeDate(2000,1,1);
+  // Initialize null floats
   pUInt64(@nf)^ := $FFF8000000000000;
   pCardinal(@ne)^ := $FFC00000;
 end;
 
 class destructor Tk0.Destroy;
 begin
-//  if _hDll <> 0 then
-//    UnlockResource(_hDll);
-//  BTMemoryFreeLibrary(_Dll);
-//  if Assigned(_LOldNotifyHook) then
-//    SetDliNotifyHook2(_LOldNotifyHook);
-//  if Assigned(_LOldFailureHook) then
-//    SetDliFailureHook2(_LOldFailureHook);
 end;
 
-(*
-class function Tk0.MyDelayedLoadHook(dliNotify: dliNotification; pdli: PDelayLoadInfo): Pointer; stdcall;
-begin
-  { Write a message for each dli notification }
-  case dliNotify of
-    dliNoteStartProcessing:
-//      WriteLn('Started the delayed load session for "', pdli.szDll, '" DLL')
-;
-    dliNotePreLoadLibrary:
-//      WriteLn('Starting to load "', pdli.szDll, '" DLL')
-;
-    dliNotePreGetProcAddress:
-//      WriteLn('Want to get address of "', ImportName(pdli.dlp), '" in "', pdli.szDll, '" DLL')
-      ;
-    dliNoteEndProcessing:
-//      WriteLn('Ended the delaay load session for "', pdli.szDll, '" DLL')
-      ;
-    dliFailLoadLibrary:
-//      WriteLn('Failed to load "', pdli.szDll, '" DLL')
-      ;
-    dliFailGetProcAddress:
-//      WriteLn('Failed to get proc address for "', ImportName(pdli.dlp), '" in "', pdli.szDll, '" DLL')
-;
-  end;
-
-  { Call the old hooks if they are not nil }
-  { This is recommended to do in case the old hook do further processing }
-  if dliNotify in [dliFailLoadLibrary, dliFailGetProcAddress] then
-  begin
-    if Assigned(_LOldNotifyHook) then
-      _LOldFailureHook(dliNotify, pdli);
-  end else
-  begin
-    if Assigned(_LOldNotifyHook) then
-      _LOldNotifyHook(dliNotify, pdli);
-  end;
-
-  Result := nil;
-end;
-*)
 
 function Tk0.GetkCArr: pkCArr;
 begin
