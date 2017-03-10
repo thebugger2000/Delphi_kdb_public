@@ -53,7 +53,7 @@ begin
   try
     Session := khp(_Host,_Port);
     if(Session <=0) then
-      raise Tk0.Excpt.CreateFmt('Connection error port host<%s> port <%d>',[_Host,_Port]);
+      raise Tk0.Excpt.CreateFmt('Connection error port host<%s> port <%d> make sure q.com has been run locally with "q -p 1234" command line',[_Host,_Port]);
     // First store 2 + 2 in x
     r := k_('x:2+2');
     if r^.t <> ktUnaryPrimitive then
