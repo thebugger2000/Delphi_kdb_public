@@ -6,7 +6,7 @@ uses Classes, System.SysUtils, Windows;
 //put the delphi equivalent header guards around all of code if necessary
 {$R *.res}
 const DLLName = 'c.dll';
-//{$LINK 'f:\documents\cobra\APIs\KDB\c.obj'}
+
 {$DEFINE KVER30}
 type
   kType = (
